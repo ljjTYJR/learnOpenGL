@@ -1,30 +1,35 @@
-#pragma once
-#include <string>
+#ifndef SHADER_H
+#define SHADER_H
 
-// Utitlity class to load, compile and attach a vertex- and fragment shader to a program
-class ShaderUtil
+#include<glad/glad.h>
+
+#include<string>
+#include<fstream>
+#include<sstream>
+#include<iostream>
+#include"glm.hpp"
+#include<gtc/matrix_transform.hpp>
+#include<gtc/type_ptr.hpp>
+
+class Shader
 {
+public:
+	//程序ID
+	unsigned int ID;
+
+	//构造着色器
+	//构 造 函 数
+	Shader(const GLchar* vertexPath, const GLchar* fragmentPath);
+	//激活程序
+	void use();
+	//uniform 工具函数
+	void setBool(const std::string &name, bool value) const;	//常值函数，const的后缀主要是shader不能够改变而不是返回值是const
+	void setInt(const std::string &name, int value) const;
+	void setFloat(const std::string &name, float value) const;
+	void setMat4(const std::string &name, glm::mat4& inputMat)const;
+		//上面三个函数可以通过模板类来进行修改
 
 private:
-	//程 序 ID
-	unsigned int mProgramId;
-	//type & source 获 取 shader 的 数 据
-	unsigned int GetCompiledShader(unsigned int shader_type, const std::string& shader_source);
-
-public:
-	ShaderUtil() {}
-	~ShaderUtil() {}
-
-	// Load a vertex and a fragment shader from file
-	// 分 为 顶 点 和 面 片
-	bool Load(const std::string& vertexShaderFile, const std::string& fragmentShaderFile);
-
-	// Use the program
-	void Use();
-
-	// Delete the program
-	void Delete();
-
-
-
+	void checkCompileErroes(unsigned int shader, std::string type);
 };
+#endif // !SHADER_H
